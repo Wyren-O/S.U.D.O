@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://b0ib8gykp7gkf"]
+
+[ext_resource type="Shader" uid="uid://tllrhj4l2iyi" path="res://ps1_wobble.gdshader" id="1_m72kl"]
+[ext_resource type="Texture2D" uid="uid://sl0yh13qrbp6" path="res://Textures/ConcreteBunker0265_2_350.jpg" id="2_wq7am"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_m72kl")
+shader_parameter/albedo_texture = ExtResource("2_wq7am")
+shader_parameter/tint_color = Color(1, 1, 1, 1)
+shader_parameter/jitter_intensity = 0.5
+shader_parameter/resolution = Vector2(320, 240)

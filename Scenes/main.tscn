@@ -1,0 +1,201 @@
+[gd_scene load_steps=12 format=3 uid="uid://bfie1fy7jsg0g"]
+
+[ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://PS1_Concrete.tres" id="1_jjvhh"]
+[ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scenes/PlayerInteract.cs" id="2_21xkr"]
+[ext_resource type="Script" uid="uid://dx6mmrpbny1ew" path="res://Scripts/PlayerHead.cs" id="3_21xkr"]
+[ext_resource type="Script" uid="uid://bmy8jtr8n47qn" path="res://Scripts/CipherDisplay.cs" id="4_6bp64"]
+[ext_resource type="Script" uid="uid://1gmrog4bdqgb" path="res://Scenes/MonitorInteract.cs" id="5_21xkr"]
+[ext_resource type="AudioStream" uid="uid://cqbte3h688vje" path="res://Audio/machine-room-server-rack-fans-1.wav" id="5_kry3j"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h2yge"]
+sky_top_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
+sky_horizon_color = Color(0.39690363, 0.38915363, 0.38015363, 1)
+ground_horizon_color = Color(0.39690363, 0.38915363, 0.38015363, 1)
+
+[sub_resource type="Sky" id="Sky_1bvp3"]
+sky_material = SubResource("ProceduralSkyMaterial_h2yge")
+
+[sub_resource type="Environment" id="Environment_lquwl"]
+background_mode = 1
+sky = SubResource("Sky_1bvp3")
+ambient_light_color = Color(0.021268392, 0.026146011, 0.031091204, 1)
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+metallic = 1.0
+metallic_specular = 1.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kry3j"]
+size = Vector3(0.7998047, 0.84033203, 0.7391968)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lquwl")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0030436516, 0.0039687157, 0.30664694)
+material_override = ExtResource("1_jjvhh")
+cast_shadow = 0
+flip_faces = true
+size = Vector3(10, 5, 10.61145)
+
+[node name="CameraRig" type="Node3D" parent="." node_paths=PackedStringArray("InteractionRay")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1, -3)
+script = ExtResource("2_21xkr")
+InteractionRay = NodePath("Camera3D/RayCast3D")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+script = ExtResource("3_21xkr")
+
+[node name="RayCast3D" type="RayCast3D" parent="CameraRig/Camera3D"]
+target_position = Vector3(0, 0, -2.5)
+collide_with_areas = true
+
+[node name="CipherBox" type="CSGBox3D" parent="."]
+transform = Transform3D(-0.36974669, 0, 0.9291324, 0, 1, 0, -0.9291324, 0, -0.36974669, 2.216494, -1.1984012, -4.2800264)
+size = Vector3(0.64349365, 0.27610016, 0.36401367)
+
+[node name="Label3D" type="Label3D" parent="CipherBox"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.0037124157, 0.026746035, -0.18945944)
+pixel_size = 0.004
+alpha_cut = 1
+texture_filter = 0
+modulate = Color(1, 0, 0, 1)
+text = "--- ---"
+font_size = 28
+outline_size = 0
+script = ExtResource("4_6bp64")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+light_color = Color(1, 0.70980394, 0.41960785, 1)
+light_energy = 0.4
+shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 2.0
+shadow_blur = 0.0
+omni_range = 8.0
+
+[node name="MonitorLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -2.278)
+light_color = Color(4.3317675e-07, 0.5280541, 0.2646652, 1)
+light_energy = 0.5
+omni_range = 1.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_kry3j")
+volume_db = -10.0
+autoplay = true
+
+[node name="Server" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.491997, -1.2088232, -1.5653564)
+size = Vector3(1, 2.5940552, 1)
+
+[node name="Server2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.492, -1.209, -2.87)
+size = Vector3(1, 2.5940552, 1)
+
+[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+
+[node name="SUD" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018516183, -1.4487028, -1.3172933)
+size = Vector3(1.8114626, 2.0960884, 1.2713852)
+material = SubResource("StandardMaterial3D_1bvp3")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 0.9799038, 0.19947055, 0, -0.19947055, 0.9799038, 0.004, -2.087046, -2.2863636)
+size = Vector3(1.7991943, 1, 0.8701172)
+
+[node name="ScreenHole" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.97091675, -1.948)
+operation = 2
+size = Vector3(1.2814941, 0.8578491, 0.16366577)
+
+[node name="ScreenHole2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29513404, -0.7628247, -1.8703423)
+operation = 2
+size = Vector3(0.6387446, 0.3752959, 0.14231543)
+
+[node name="ScreenHole3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29576758, -1.1797851, -1.843)
+operation = 2
+size = Vector3(0.6405351, 0.3935703, 0.113)
+
+[node name="ScreenHole4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3368645, -1.2007324, -1.843)
+operation = 2
+size = Vector3(0.5640288, 0.3499505, 0.113)
+
+[node name="ScreenHole5" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33539838, -0.7816305, -1.885)
+operation = 2
+size = Vector3(0.55482554, 0.408879, 0.113)
+
+[node name="Screen" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, -0.763, -1.832307)
+size = Vector3(0.639, 0.375, 0.02107998)
+
+[node name="Screen4" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.296, -1.18, -1.843)
+size = Vector3(0.639, 0.375, 0.02107998)
+
+[node name="Screen2" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.335, -0.782, -1.8074825)
+size = Vector3(0.555, 0.409, 0.055035155)
+
+[node name="Screen3" type="CSGBox3D" parent="CSGCombiner3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.337, -1.201, -1.7684084)
+size = Vector3(0.564, 0.35, 0.113)
+
+[node name="Table" type="CSGBox3D" parent="."]
+transform = Transform3D(0.9766723, 0, -0.21473533, 0, 1, 0, 0.21473533, 0, 0.9766723, 2.0411766, -1.915554, -3.4449232)
+size = Vector3(1.7954407, 1.157959, 2.7422485)
+
+[node name="pc" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4586265, -0.84696656, -3.1650279)
+
+[node name="Area3D" type="Area3D" parent="pc" node_paths=PackedStringArray("MainCamera", "ZoomTarget")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45137215, 0, 0)
+script = ExtResource("5_21xkr")
+MainCamera = NodePath("../../CameraRig/Camera3D")
+ZoomTarget = NodePath("../../Marker3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="pc/Area3D"]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0.44051504, -0.050509036, 0.0050957203)
+shape = SubResource("BoxShape3D_kry3j")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(0.9766723, 0, -0.21473533, 0, 1, 0, 0.21473533, 0, 0.9766723, 1.4011012, -1.308006, -3.2868152)
+size = Vector3(0.41552734, 0.056640625, 1.0898438)
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1.379684, -0.8855243, -3.1579814)
+
+[node name="MissonTerminal" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="MissonTerminal"]
+layout_mode = 0
+offset_right = 288.0
+offset_bottom = 143.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MissonTerminal/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TitleLabel" type="Label" parent="MissonTerminal/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MissionText" type="Label" parent="MissonTerminal/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="GetMissionButton" type="Button" parent="MissonTerminal/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="MissonTerminal"]

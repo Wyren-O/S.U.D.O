@@ -1,0 +1,19 @@
+# --- Godot ---
+.godot/
+.import/
+export_presets.cfg
+
+# --- C# / Mono / IDE ---
+.mono/
+.vscode/
+.vs/
+*.userprefs
+
+# --- Python / Backend ---
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite3
+
