@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://b0ib8gykp7gkf"]
 
-[ext_resource type="Shader" uid="uid://tllrhj4l2iyi" path="res://ps1_wobble.gdshader" id="1_m72kl"]
+[ext_resource type="Shader" uid="uid://tllrhj4l2iyi" path="res://Shaders/ps1_wobble.gdshader" id="1_m72kl"]
 [ext_resource type="Texture2D" uid="uid://sl0yh13qrbp6" path="res://Textures/ConcreteBunker0265_2_350.jpg" id="2_wq7am"]
 
 [resource]

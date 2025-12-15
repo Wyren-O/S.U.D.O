@@ -5,7 +5,9 @@ public partial class PlayerHead : Camera3D
 {
 	[Export] public float MouseSensitivity = 0.003f;
 	[Export] public float MaxLookLeftRight = 100.0f;
-	[Export] public float MaxLookUpDown = 50.0f;    
+	[Export] public float MaxLookUpDown = 50.0f;  
+	
+	public bool IsLocked = false;  
 
 	private float _rotationX = 0f; 
 	private float _rotationY = 0f; 
@@ -17,6 +19,8 @@ public partial class PlayerHead : Camera3D
 
 	public override void _Input(InputEvent @event)
 	{
+		if (IsLocked) return;
+		
 		if (@event is InputEventMouseMotion motion)
 		{
 			_rotationY -= motion.Relative.X * MouseSensitivity;

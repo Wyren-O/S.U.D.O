@@ -1,11 +1,14 @@
-[gd_scene load_steps=12 format=3 uid="uid://bfie1fy7jsg0g"]
+[gd_scene load_steps=20 format=3 uid="uid://bfie1fy7jsg0g"]
 
-[ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://PS1_Concrete.tres" id="1_jjvhh"]
-[ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scenes/PlayerInteract.cs" id="2_21xkr"]
+[ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://Materials/PS1_Concrete.tres" id="1_jjvhh"]
+[ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scripts/PlayerInteract.cs" id="2_21xkr"]
 [ext_resource type="Script" uid="uid://dx6mmrpbny1ew" path="res://Scripts/PlayerHead.cs" id="3_21xkr"]
 [ext_resource type="Script" uid="uid://bmy8jtr8n47qn" path="res://Scripts/CipherDisplay.cs" id="4_6bp64"]
-[ext_resource type="Script" uid="uid://1gmrog4bdqgb" path="res://Scenes/MonitorInteract.cs" id="5_21xkr"]
+[ext_resource type="Script" uid="uid://1gmrog4bdqgb" path="res://Scripts/MonitorInteract.cs" id="5_21xkr"]
 [ext_resource type="AudioStream" uid="uid://cqbte3h688vje" path="res://Audio/machine-room-server-rack-fans-1.wav" id="5_kry3j"]
+[ext_resource type="Script" uid="uid://dmc6ahm4abfjv" path="res://Scripts/MissionTerminal.cs" id="6_21xkr"]
+[ext_resource type="Texture2D" uid="uid://cttqm5abltj0s" path="res://Textures/terminal.png" id="7_344ge"]
+[ext_resource type="Texture2D" uid="uid://h0qedytm6kec" path="res://Textures/keyboard.png" id="8_ynf5e"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h2yge"]
 sky_top_color = Color(0.18717614, 0.18717614, 0.18717614, 1)
@@ -26,8 +29,26 @@ glow_enabled = true
 metallic = 1.0
 metallic_specular = 1.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_kry3j"]
-size = Vector3(0.7998047, 0.84033203, 0.7391968)
+[sub_resource type="ViewportTexture" id="ViewportTexture_21xkr"]
+viewport_path = NodePath("pc/TerminalViewport")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6bp64"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_ynf5e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hptm8"]
+albedo_texture = ExtResource("7_344ge")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d1ilt"]
+albedo_texture = ExtResource("8_ynf5e")
+uv1_scale = Vector3(-1, 1, -1)
+uv1_offset = Vector3(1, 1, 0)
+point_size = 3.5
+z_clip_scale = 0.01
+fov_override = 84.4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6bp64"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="Main" type="Node3D"]
 
@@ -156,46 +177,83 @@ size = Vector3(1.7954407, 1.157959, 2.7422485)
 [node name="pc" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4586265, -0.84696656, -3.1650279)
 
-[node name="Area3D" type="Area3D" parent="pc" node_paths=PackedStringArray("MainCamera", "ZoomTarget")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45137215, 0, 0)
+[node name="Sprite3D" type="Sprite3D" parent="pc"]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -0.50377584, 0.04305899, 0)
+visible = false
+pixel_size = 0.0015
+transparent = false
+texture = SubResource("ViewportTexture_21xkr")
+
+[node name="TerminalViewport" type="SubViewport" parent="pc"]
+size = Vector2i(640, 480)
+render_target_update_mode = 4
+
+[node name="Area3D" type="Area3D" parent="pc" node_paths=PackedStringArray("MainCamera", "ZoomTarget", "MissionTerminal", "PlayerHeadScript")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.028957129, 0, 0)
 script = ExtResource("5_21xkr")
 MainCamera = NodePath("../../CameraRig/Camera3D")
 ZoomTarget = NodePath("../../Marker3D")
+MissionTerminal = NodePath("../../CanvasLayer/MissionTerminal")
+PlayerHeadScript = NodePath("../../CameraRig/Camera3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="pc/Area3D"]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0.44051504, -0.050509036, 0.0050957203)
-shape = SubResource("BoxShape3D_kry3j")
+shape = SubResource("BoxShape3D_6bp64")
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+[node name="FakeScreen" type="MeshInstance3D" parent="pc"]
+transform = Transform3D(-3.4969112e-08, 0, -0.9, 0, 0.7, 0, 0.8, 0, -3.934025e-08, -0.52443695, 0.042491615, 0)
+mesh = SubResource("QuadMesh_ynf5e")
+surface_material_override/0 = SubResource("StandardMaterial3D_hptm8")
+
+[node name="Keyboard" type="CSGBox3D" parent="."]
 transform = Transform3D(0.9766723, 0, -0.21473533, 0, 1, 0, 0.21473533, 0, 0.9766723, 1.4011012, -1.308006, -3.2868152)
 size = Vector3(0.41552734, 0.056640625, 1.0898438)
+material = SubResource("StandardMaterial3D_d1ilt")
 
 [node name="Marker3D" type="Marker3D" parent="."]
-transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1.379684, -0.8855243, -3.1579814)
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1.1657548, -0.8855243, -3.1579814)
 
-[node name="MissonTerminal" type="Control" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MissionTerminal" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("MissionText", "RequestButton", "Http")]
+visible = false
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_21xkr")
+MissionText = NodePath("Panel/VBoxContainer/Label")
+RequestButton = NodePath("Panel/VBoxContainer/Button")
+Http = NodePath("Panel/HTTPRequest")
+
+[node name="Panel" type="Panel" parent="CanvasLayer/MissionTerminal"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6bp64")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MissionTerminal/Panel"]
+layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="Panel" parent="MissonTerminal"]
-layout_mode = 0
-offset_right = 288.0
-offset_bottom = 143.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MissonTerminal/Panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="TitleLabel" type="Label" parent="MissonTerminal/Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
+text = "SYSTEM READ"
 
-[node name="MissionText" type="Label" parent="MissonTerminal/Panel/VBoxContainer"]
+[node name="Label2" type="Label" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
+text = "No Active Tasks"
 
-[node name="GetMissionButton" type="Button" parent="MissonTerminal/Panel/VBoxContainer"]
+[node name="Button" type="Button" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
+text = "Download"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="MissonTerminal"]
+[node name="HTTPRequest" type="HTTPRequest" parent="CanvasLayer/MissionTerminal/Panel"]
+
+[node name="MonitorLight2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8491455, -0.85488284, -3.1611366)
+light_color = Color(0.032348294, 0.21533248, 1, 1)
+light_energy = 0.5
+omni_range = 1.5
