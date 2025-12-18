@@ -5,7 +5,8 @@ public partial class PlayerHead : Camera3D
 {
 	[Export] public float MouseSensitivity = 0.003f;
 	[Export] public float MaxLookLeftRight = 100.0f;
-	[Export] public float MaxLookUpDown = 50.0f;  
+	[Export] public float MaxLookUpDown = 50.0f; 
+	[Export] public RayCast3D InteractionRay; 
 	
 	public bool IsLocked = false;  
 
@@ -35,7 +36,36 @@ public partial class PlayerHead : Camera3D
 			Rotation = new Vector3(_rotationX, _rotationY, 0);
 		}
 	}
-	
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (IsLocked) return;
+
+		if (@event.IsActionPressed("scroll_up") || @event.IsActionPressed("scroll_down"))
+		{
+			if (InteractionRay != null && InteractionRay.IsColliding())
+			{
+				var collider = InteractionRay.GetCollider() as Node;
+				ServerRack rack = null;
+
+				if (collider is ServerRack r)
+				{
+					rack = r;
+				}
+				else if (collider.GetParent() is ServerRack parentRack)
+				{
+					rack = parentRack;
+				}
+
+				if (rack != null)
+				{
+					float dir = @event.IsActionPressed("scroll_up") ? 1.0f : -1.0f;
+					rack.AdjustFrequency(dir);
+				}
+			}
+		}
+	}
+
 	public override void _Process(double delta)
 	{
 		if (Input.IsActionJustPressed("ui_cancel")) 

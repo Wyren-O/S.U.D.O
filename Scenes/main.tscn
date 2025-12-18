@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bfie1fy7jsg0g"]
+[gd_scene load_steps=25 format=3 uid="uid://bfie1fy7jsg0g"]
 
 [ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://Materials/PS1_Concrete.tres" id="1_jjvhh"]
 [ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scripts/PlayerInteract.cs" id="2_21xkr"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://1gmrog4bdqgb" path="res://Scripts/MonitorInteract.cs" id="5_21xkr"]
 [ext_resource type="AudioStream" uid="uid://cqbte3h688vje" path="res://Audio/machine-room-server-rack-fans-1.wav" id="5_kry3j"]
 [ext_resource type="Script" uid="uid://dmc6ahm4abfjv" path="res://Scripts/MissionTerminal.cs" id="6_21xkr"]
+[ext_resource type="Script" uid="uid://cotja4nvkuii2" path="res://Scripts/ServerRack.cs" id="6_d1ilt"]
+[ext_resource type="Texture2D" uid="uid://bjoo4o4y427ya" path="res://Textures/icon.svg" id="7_6iyac"]
 [ext_resource type="Texture2D" uid="uid://cttqm5abltj0s" path="res://Textures/terminal.png" id="7_344ge"]
 [ext_resource type="Texture2D" uid="uid://h0qedytm6kec" path="res://Textures/keyboard.png" id="8_ynf5e"]
 
@@ -29,6 +31,14 @@ glow_enabled = true
 metallic = 1.0
 metallic_specular = 1.0
 
+[sub_resource type="QuadMesh" id="QuadMesh_fdnlq"]
+size = Vector2(0.52, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jkdf5"]
+albedo_texture = ExtResource("7_6iyac")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_d1ilt"]
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_21xkr"]
 viewport_path = NodePath("pc/TerminalViewport")
 
@@ -37,6 +47,7 @@ viewport_path = NodePath("pc/TerminalViewport")
 [sub_resource type="QuadMesh" id="QuadMesh_ynf5e"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hptm8"]
+albedo_color = Color(0.17080188, 3.927469e-05, 0.63022673, 1)
 albedo_texture = ExtResource("7_344ge")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d1ilt"]
@@ -67,8 +78,9 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -
 script = ExtResource("2_21xkr")
 InteractionRay = NodePath("Camera3D/RayCast3D")
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+[node name="Camera3D" type="Camera3D" parent="CameraRig" node_paths=PackedStringArray("InteractionRay")]
 script = ExtResource("3_21xkr")
+InteractionRay = NodePath("RayCast3D")
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraRig/Camera3D"]
 target_position = Vector3(0, 0, -2.5)
@@ -118,57 +130,92 @@ size = Vector3(1, 2.5940552, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.492, -1.209, -2.87)
 size = Vector3(1, 2.5940552, 1)
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+[node name="ServerRack" type="CSGCombiner3D" parent="." node_paths=PackedStringArray("ScreenFrequency", "ScreenInfo", "ScreenImage", "ScreenDecoder")]
+script = ExtResource("6_d1ilt")
+ScreenFrequency = NodePath("ScreenFrequency")
+ScreenInfo = NodePath("ScreenInfo")
+ScreenImage = NodePath("ScreenImage")
+ScreenDecoder = NodePath("ScreenDecoder")
 
-[node name="SUD" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="SUD" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018516183, -1.4487028, -1.3172933)
 size = Vector3(1.8114626, 2.0960884, 1.2713852)
 material = SubResource("StandardMaterial3D_1bvp3")
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="CSGBox3D" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 0.9799038, 0.19947055, 0, -0.19947055, 0.9799038, 0.004, -2.087046, -2.2863636)
 size = Vector3(1.7991943, 1, 0.8701172)
 
-[node name="ScreenHole" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="ScreenHole" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.97091675, -1.948)
 operation = 2
 size = Vector3(1.2814941, 0.8578491, 0.16366577)
 
-[node name="ScreenHole2" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="ScreenHole2" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29513404, -0.7628247, -1.8703423)
 operation = 2
 size = Vector3(0.6387446, 0.3752959, 0.14231543)
 
-[node name="ScreenHole3" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="ScreenHole3" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.29576758, -1.1797851, -1.843)
 operation = 2
 size = Vector3(0.6405351, 0.3935703, 0.113)
 
-[node name="ScreenHole4" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="ScreenHole4" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3368645, -1.2007324, -1.843)
 operation = 2
 size = Vector3(0.5640288, 0.3499505, 0.113)
 
-[node name="ScreenHole5" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="ScreenHole5" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33539838, -0.7816305, -1.885)
 operation = 2
 size = Vector3(0.55482554, 0.408879, 0.113)
 
-[node name="Screen" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Screen" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.295, -0.763, -1.832307)
 size = Vector3(0.639, 0.375, 0.02107998)
 
-[node name="Screen4" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Screen4" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.296, -1.18, -1.843)
 size = Vector3(0.639, 0.375, 0.02107998)
 
-[node name="Screen2" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Screen2" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.335, -0.782, -1.8074825)
 size = Vector3(0.555, 0.409, 0.055035155)
 
-[node name="Screen3" type="CSGBox3D" parent="CSGCombiner3D"]
+[node name="Screen3" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.337, -1.201, -1.7684084)
 size = Vector3(0.564, 0.35, 0.113)
+
+[node name="ScreenFrequency" type="Label3D" parent="ServerRack"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.27265784, -0.7721081, -1.8576318)
+pixel_size = 0.003
+modulate = Color(0.2908686, 0.7717291, 7.70092e-07, 1)
+text = "000.0 MHz"
+
+[node name="ScreenInfo" type="Label3D" parent="ServerRack"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.34843335, -0.7702129, -1.8402365)
+pixel_size = 0.002
+modulate = Color(0.2901961, 0.77254903, 0, 1)
+text = "NO SIGNAL"
+
+[node name="ScreenImage" type="MeshInstance3D" parent="ServerRack"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3356151, -1.1949174, -1.8738071)
+mesh = SubResource("QuadMesh_fdnlq")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_jkdf5")
+
+[node name="ScreenDecoder" type="Label3D" parent="ServerRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54140747, -1.025548, -1.8550532)
+pixel_size = 0.003
+modulate = Color(0.2901961, 0.77254903, 0, 1)
+text = "..."
+
+[node name="Hitbox" type="StaticBody3D" parent="ServerRack"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ServerRack/Hitbox"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.30922946, -0.72202367, -1.5988408)
+shape = SubResource("BoxShape3D_d1ilt")
 
 [node name="Table" type="CSGBox3D" parent="."]
 transform = Transform3D(0.9766723, 0, -0.21473533, 0, 1, 0, 0.21473533, 0, 0.9766723, 2.0411766, -1.915554, -3.4449232)
@@ -240,14 +287,17 @@ offset_bottom = 40.0
 
 [node name="Label" type="Label" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
-text = "SYSTEM READ"
+theme_override_colors/font_color = Color(0.15294118, 0, 1, 1)
+text = "SYSTEM READY"
 
 [node name="Label2" type="Label" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.15294118, 0, 1, 1)
 text = "No Active Tasks"
 
 [node name="Button" type="Button" parent="CanvasLayer/MissionTerminal/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.15294118, 0, 1, 1)
 text = "Download"
 
 [node name="HTTPRequest" type="HTTPRequest" parent="CanvasLayer/MissionTerminal/Panel"]

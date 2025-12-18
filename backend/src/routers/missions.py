@@ -10,3 +10,4 @@ router = APIRouter(prefix="/missions", tags=["missions"])
 def get_next_mission(db: Session = Depends(get_db)):
     mission = generate_random_mission(db)
     return mission
+
