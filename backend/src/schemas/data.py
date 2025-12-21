@@ -11,7 +11,8 @@ class MissionBase(BaseModel):
     description: str
     frequency: float
     file_size: float
-    
+    mission_type: str
+    mission_content: str | None = None
     scary: bool = False
     
 class MissionCreate(MissionBase):

@@ -11,4 +11,5 @@ class Mission(Base):
     file_size: Mapped[float]
     is_completed: Mapped[bool] = mapped_column(default=False)
     mission_type: Mapped[str] = mapped_column(default="text")
+    mission_content: Mapped[str] = mapped_column(default="SYSTEM DATA DECRYPTED")
     

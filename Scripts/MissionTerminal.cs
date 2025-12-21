@@ -8,6 +8,8 @@ public class MissionData
 	public string description { get; set; }
 	public float frequency { get; set; }
 	public float file_size { get; set; }
+	public string mission_content { get; set; }
+	public string mission_type { get; set; }
 	public int id { get; set; }
 }
 
@@ -16,15 +18,15 @@ public partial class MissionTerminal : Control
 	[Export] public Label MissionText;
 	[Export] public Button RequestButton;
 	[Export] public HttpRequest Http; 
+	
+	[Export] public ServerRack RackScript; 
 
 	private string _serverUrl = "http://127.0.0.1:8000/missions/next";
 
 	public override void _Ready()
 	{
 		RequestButton.Pressed += OnRequestButtonPressed;
-		
 		Http.RequestCompleted += OnRequestCompleted;
-		
 		MissionText.Text = "SYSTEM READY. WAITING FOR TASKS...";
 	}
 
@@ -59,10 +61,19 @@ public partial class MissionTerminal : Control
 								   $"FREQ: {mission.frequency} MHz\n" +
 								   $"SIZE: {mission.file_size} KB\n\n" +
 								   $"DESC: {mission.description}";
+
+				if (RackScript != null)
+				{
+					RackScript.SetMissionData(mission.mission_type, mission.frequency, mission.mission_content);
+				}
+				else
+				{
+					GD.PrintErr("ОШИБКА: Забыл перетащить ServerRack в поле RackScript!");
+				}
 			}
 			catch (Exception e)
 			{
-				MissionText.Text = "ERROR: CORRUPTED DATA PACKET";
+				MissionText.Text = "ERROR: CORRUPTED DATA";
 				GD.PrintErr(e.Message);
 			}
 		}

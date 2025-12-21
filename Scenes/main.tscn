@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bfie1fy7jsg0g"]
+[gd_scene load_steps=22 format=3 uid="uid://bfie1fy7jsg0g"]
 
 [ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://Materials/PS1_Concrete.tres" id="1_jjvhh"]
 [ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scripts/PlayerInteract.cs" id="2_21xkr"]
@@ -8,7 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://cqbte3h688vje" path="res://Audio/machine-room-server-rack-fans-1.wav" id="5_kry3j"]
 [ext_resource type="Script" uid="uid://dmc6ahm4abfjv" path="res://Scripts/MissionTerminal.cs" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://cotja4nvkuii2" path="res://Scripts/ServerRack.cs" id="6_d1ilt"]
-[ext_resource type="Texture2D" uid="uid://bjoo4o4y427ya" path="res://Textures/icon.svg" id="7_6iyac"]
 [ext_resource type="Texture2D" uid="uid://cttqm5abltj0s" path="res://Textures/terminal.png" id="7_344ge"]
 [ext_resource type="Texture2D" uid="uid://h0qedytm6kec" path="res://Textures/keyboard.png" id="8_ynf5e"]
 
@@ -30,12 +29,6 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 metallic = 1.0
 metallic_specular = 1.0
-
-[sub_resource type="QuadMesh" id="QuadMesh_fdnlq"]
-size = Vector2(0.52, 0.3)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jkdf5"]
-albedo_texture = ExtResource("7_6iyac")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d1ilt"]
 
@@ -130,12 +123,13 @@ size = Vector3(1, 2.5940552, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.492, -1.209, -2.87)
 size = Vector3(1, 2.5940552, 1)
 
-[node name="ServerRack" type="CSGCombiner3D" parent="." node_paths=PackedStringArray("ScreenFrequency", "ScreenInfo", "ScreenImage", "ScreenDecoder")]
+[node name="ServerRack" type="CSGCombiner3D" parent="." node_paths=PackedStringArray("ScreenFrequency", "ScreenInfo", "ScreenImage", "ScreenDecoder", "SignalAudioPlayer")]
 script = ExtResource("6_d1ilt")
 ScreenFrequency = NodePath("ScreenFrequency")
 ScreenInfo = NodePath("ScreenInfo")
 ScreenImage = NodePath("ScreenImage")
 ScreenDecoder = NodePath("ScreenDecoder")
+SignalAudioPlayer = NodePath("../TerminalAudios")
 
 [node name="SUD" type="CSGBox3D" parent="ServerRack"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0018516183, -1.4487028, -1.3172933)
@@ -195,23 +189,21 @@ text = "000.0 MHz"
 
 [node name="ScreenInfo" type="Label3D" parent="ServerRack"]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.34843335, -0.7702129, -1.8402365)
-pixel_size = 0.002
+pixel_size = 0.0015
 modulate = Color(0.2901961, 0.77254903, 0, 1)
 text = "NO SIGNAL"
 
 [node name="ScreenImage" type="MeshInstance3D" parent="ServerRack"]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3356151, -1.1949174, -1.8738071)
-mesh = SubResource("QuadMesh_fdnlq")
 skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_jkdf5")
 
 [node name="ScreenDecoder" type="Label3D" parent="ServerRack"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.54140747, -1.025548, -1.8550532)
-pixel_size = 0.003
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.30572248, -1.025548, -1.8550532)
+pixel_size = 0.001
 modulate = Color(0.2901961, 0.77254903, 0, 1)
-text = "..."
 
 [node name="Hitbox" type="StaticBody3D" parent="ServerRack"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.58007437, 0, -0.008590281, -0.7651031)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ServerRack/Hitbox"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.30922946, -0.72202367, -1.5988408)
@@ -261,7 +253,7 @@ transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 1.16
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="MissionTerminal" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("MissionText", "RequestButton", "Http")]
+[node name="MissionTerminal" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("MissionText", "RequestButton", "Http", "RackScript")]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -273,6 +265,7 @@ script = ExtResource("6_21xkr")
 MissionText = NodePath("Panel/VBoxContainer/Label")
 RequestButton = NodePath("Panel/VBoxContainer/Button")
 Http = NodePath("Panel/HTTPRequest")
+RackScript = NodePath("../../ServerRack")
 
 [node name="Panel" type="Panel" parent="CanvasLayer/MissionTerminal"]
 layout_mode = 0
@@ -307,3 +300,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8491455, -0.85488284, -3.16
 light_color = Color(0.032348294, 0.21533248, 1, 1)
 light_energy = 0.5
 omni_range = 1.5
+
+[node name="TerminalAudios" type="AudioStreamPlayer3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0816648, -0.570414, -2.0100403)
