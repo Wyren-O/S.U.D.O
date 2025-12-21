@@ -14,17 +14,12 @@ TEXT_LIST = [
     "WEATHER REPORT: ACID RAIN EXPECTED."
 ]
 
-IMAGE_LIST = [
-    "icon.svg",           
-    "terminal.png",       
-    "secret_map.png",     
-    "monster_01.png"     
+IMAGE_LIST = [          
+    "secret_map.jpg",     
 ]
 
 AUDIO_LIST = [
-    "machine-room-server-rack-fans-1.wav", 
-    "scary_scream.wav",   
-    "morse_code.wav"    
+    "682401__pnmcarrierailfan__explosions-echo-blast-explos.mp3"
 ]
 
 def generate_random_mission(db: Session) -> Mission:
@@ -56,6 +51,7 @@ def generate_random_mission(db: Session) -> Mission:
         frequency=frequency,
         file_size=file_size,
         is_completed=False,
+        mission_type=m_type,     
         mission_content=content
     )
     
