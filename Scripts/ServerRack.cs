@@ -21,7 +21,9 @@ public partial class ServerRack : Node3D
 	private float _currentFrequency = 90.0f;
 	private float _signalStrength = 0.0f;
 	private Random _rng = new Random();
-
+	
+	public bool IsSignalReady => _signalStrength >= 0.95f;
+	
 	public override void _Ready()
 	{
 		if (ScreenImage != null) ScreenImage.Visible = false;
@@ -83,13 +85,14 @@ public partial class ServerRack : Node3D
 			ProcessAudioMission();
 		}
 
-		if (_signalStrength >= 0.99f)
+		if (_signalStrength >= 0.98f)
 		{
 			ScreenInfo.Text = "SIGNAL LOCKED";
 			ScreenInfo.Modulate = Colors.Green;
 		}
 		else
 		{
+			ScreenInfo.Text = "SIGNAL False";
 			ScreenInfo.Modulate = Colors.Orange;
 		}
 	}
@@ -98,7 +101,7 @@ public partial class ServerRack : Node3D
 	{
 		ScreenImage.Visible = false; 
 		
-		if (_signalStrength >= 0.99f)
+		if (_signalStrength >= 0.97f)
 		{
 			ScreenDecoder.Text = _targetContent;
 			return;

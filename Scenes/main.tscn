@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bfie1fy7jsg0g"]
+[gd_scene load_steps=25 format=3 uid="uid://bfie1fy7jsg0g"]
 
 [ext_resource type="Material" uid="uid://b0ib8gykp7gkf" path="res://Materials/PS1_Concrete.tres" id="1_jjvhh"]
 [ext_resource type="Script" uid="uid://pafe6qw2fksa" path="res://Scripts/PlayerInteract.cs" id="2_21xkr"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://cqbte3h688vje" path="res://Audio/machine-room-server-rack-fans-1.wav" id="5_kry3j"]
 [ext_resource type="Script" uid="uid://dmc6ahm4abfjv" path="res://Scripts/MissionTerminal.cs" id="6_21xkr"]
 [ext_resource type="Script" uid="uid://cotja4nvkuii2" path="res://Scripts/ServerRack.cs" id="6_d1ilt"]
+[ext_resource type="Texture2D" uid="uid://bjoo4o4y427ya" path="res://Textures/icon.svg" id="7_6iyac"]
 [ext_resource type="Texture2D" uid="uid://cttqm5abltj0s" path="res://Textures/terminal.png" id="7_344ge"]
 [ext_resource type="Texture2D" uid="uid://h0qedytm6kec" path="res://Textures/keyboard.png" id="8_ynf5e"]
 
@@ -29,6 +30,12 @@ glow_enabled = true
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 metallic = 1.0
 metallic_specular = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_d1ilt"]
+size = Vector2(0.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jkdf5"]
+albedo_texture = ExtResource("7_6iyac")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d1ilt"]
 
@@ -194,8 +201,10 @@ modulate = Color(0.2901961, 0.77254903, 0, 1)
 text = "NO SIGNAL"
 
 [node name="ScreenImage" type="MeshInstance3D" parent="ServerRack"]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3356151, -1.1949174, -1.8738071)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.3356151, -1.186996, -1.8738071)
+mesh = SubResource("QuadMesh_d1ilt")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_jkdf5")
 
 [node name="ScreenDecoder" type="Label3D" parent="ServerRack"]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0.30572248, -1.025548, -1.8550532)
